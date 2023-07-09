@@ -1,11 +1,10 @@
-
 import discord
 from discord import app_commands
 import logging
 
 
 class BotClient(discord.Client):
-    def __init__(self, intents, channels_blacklist, channel_to_post_to = None):
+    def __init__(self, intents, channels_blacklist, channel_to_post_to=None):
         super().__init__(intents=intents)
         self.channel_to_post_to = channel_to_post_to
         self.channels_blacklist = channels_blacklist
@@ -13,6 +12,7 @@ class BotClient(discord.Client):
 
     async def on_ready(self):
         logging.info('Logged on as {0}!'.format(self.user))
+        # TODO sync with all guilds
 
     async def on_voice_state_update(self, member, before, after):
         after_channel = after.channel
@@ -25,7 +25,7 @@ class BotClient(discord.Client):
 
             message = f'{member.name} joined {after.channel}'
             logging.info(message)
-            await self.write_to_channel(self.channel_to_post_to, message)  # TODO make it configuratble
+            await self.write_to_channel(self.channel_to_post_to, message)
 
     async def write_to_channel(self, channel_name, message):
         for guild in self.guilds:
@@ -33,11 +33,11 @@ class BotClient(discord.Client):
                 if channel.name == channel_name:
                     await channel.send(message)
 
-    async def setup_hook(self):
-        # This copies the global commands over to your guild.
-        guild = discord.Object(id='455132185440026636')
-        self.tree.copy_global_to(guild=guild) # TODO make it configurable
-        await self.tree.sync(guild=guild)
+    # async def setup_hook(self):
+    #     # This copies the global commands over to your guild.
+    #     guild = discord.Object(id='455132185440026636')
+    #     self.tree.copy_global_to(guild=guild) # TODO make it configurable
+    #     await self.tree.sync(guild=guild)
 
 
 if __name__ == '__main__':
@@ -59,6 +59,7 @@ if __name__ == '__main__':
         # noinspection PyUnresolvedReferences
         await interaction.response.send_message(f'Posting notifications to {channel.name}')
 
+
     @client.tree.command()
     async def blacklist_show(interaction: discord.Interaction):
         embed = discord.Embed(title='Current channels which are ignored by bot')
@@ -78,6 +79,7 @@ if __name__ == '__main__':
 
         # noinspection PyUnresolvedReferences
         await interaction.response.send_message(f'Ignoring joinings in {channel.name}')
+
 
     @client.tree.command()
     @app_commands.describe(
