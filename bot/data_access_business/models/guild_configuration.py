@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List
 
-from data_access_business.models.guild import Guild
+from bot.data_access_business.models.guild import Guild
 
 
 @dataclass
