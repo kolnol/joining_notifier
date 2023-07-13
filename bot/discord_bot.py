@@ -49,4 +49,7 @@ class BotClient(discord.Client):
     async def setup_hook(self):
         # This copies the global commands over to your guild.
         # self.tree.fallback_to_global()  # TODO make it configurable
+        MY_GUILD = discord.Object(id=455132185440026636)
+        self.tree.copy_global_to(guild=MY_GUILD)
+        await self.tree.sync(guild=MY_GUILD)
         await self.tree.sync()

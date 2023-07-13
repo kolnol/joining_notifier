@@ -12,7 +12,7 @@ class CommandsConfigurator:
 
     @staticmethod
     def configure(client: BotClient):
-        @client.tree.command(name='channel-notification-channel')
+        @app_commands.command()
         @app_commands.describe(
             channel='The channel to post notifications to',
         )
@@ -30,6 +30,20 @@ class CommandsConfigurator:
             # TODO add check that bot has access to this channel
             # noinspection PyUnresolvedReferences
             await interaction.response.send_message(f'From now on I am posting notifications to {channel.name}')
+
+        @app_commands.command()
+        async def notification_channel_show(interaction: discord.Interaction):
+            guild_id = str(interaction.guild_id)
+            config = client.guild_config_repository.get(guild_id)
+            if config is None:
+                # noinspection PyUnresolvedReferences
+                await interaction.response.send_message(
+                    'Not configured. Please run /channel-notification-channel command to do initial setup')
+                return
+
+            channel = await client.fetch_channel(int(config.channel_id_to_post_to))
+            # noinspection PyUnresolvedReferences
+            await interaction.response.send_message(f'I am posting notifications to {channel.name}')
 
         @app_commands.command()
         async def blacklist_show(interaction: discord.Interaction):
@@ -89,8 +103,15 @@ class CommandsConfigurator:
             # noinspection PyUnresolvedReferences
             await interaction.response.send_message(f'Removed {channel.name}')
 
-        group = discord.app_commands.Group(name='blacklist', description='Operations on channels blacklist')
-        group.command(name='show')(blacklist_show.callback)
-        group.command(name='add')(blacklist_add.callback)
-        group.command(name='delete')(blacklist_remove.callback)
-        client.tree.add_command(group)
+        blacklist_group = discord.app_commands.Group(name='blacklist', description='Operations on channels blacklist')
+        blacklist_group.command(name='show')(blacklist_show.callback)
+        blacklist_group.command(name='add')(blacklist_add.callback)
+        blacklist_group.command(name='delete')(blacklist_remove.callback)
+
+        notification_channel_group = discord.app_commands.Group(name='notification-channel',
+                                                                description='Manage channel where to post notifications')
+        notification_channel_group.command(name='add')(configure_notification_channel.callback)
+        notification_channel_group.command(name='show')(notification_channel_show.callback)
+
+        client.tree.add_command(blacklist_group)
+        client.tree.add_command(notification_channel_group)
