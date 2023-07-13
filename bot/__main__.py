@@ -5,7 +5,6 @@ from bot.data_access_file.guild_configuration_repository import GuildConfigurati
 from bot.discord_bot import BotClient
 
 if __name__ == '__main__':
-    channels_blacklist = ['general']
     intents = discord.Intents.default()
     intents.message_content = True
     intents.voice_states = True
