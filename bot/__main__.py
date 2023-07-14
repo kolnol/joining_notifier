@@ -1,3 +1,5 @@
+import os
+
 import discord
 
 from bot.commands import CommandsConfigurator
@@ -14,4 +16,7 @@ if __name__ == '__main__':
     client = BotClient(intents, repo)
     CommandsConfigurator.configure(client)
 
-    client.run('MTEyMzczMTI1MTU1NjI2MTk0OA.G-z5au.KZ8dkb0J4VcMFw1_WKdV3-LVuGSqUiPkrGhdn4')
+    token = os.environ.get('DISCORD_TOKEN')
+    if token is None:
+        raise ValueError('Token is empty. Please set DISCORD_TOKEN env variable.')
+    client.run(token)
