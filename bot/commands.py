@@ -38,7 +38,7 @@ class CommandsConfigurator:
             if config is None:
                 # noinspection PyUnresolvedReferences
                 await interaction.response.send_message(
-                    'Not configured. Please run /channel-notification-channel command to do initial setup')
+                    'Not configured. Please run notification-channel add command to do initial setup')
                 return
 
             channel = await client.fetch_channel(int(config.channel_id_to_post_to))
@@ -53,7 +53,7 @@ class CommandsConfigurator:
             if config is None:
                 # noinspection PyUnresolvedReferences
                 await interaction.response.send_message(
-                    'Not configured. Please run /channel-notification-channel command to do initial setup')
+                    'Not configured. Please run notification-channel add command to do initial setup')
                 return
 
             embed = discord.Embed(title='Current channels which are ignored by bot')
@@ -76,7 +76,7 @@ class CommandsConfigurator:
             if config is None:
                 # noinspection PyUnresolvedReferences
                 await interaction.response.send_message(
-                    'Not configured. Please run /channel-notification-channel command to do initial setup')
+                    'Not configured. Please run notification-channel add command to do initial setup')
                 return
             config.channel_ids_blacklist.append(str(channel.id))
             client.guild_config_repository.set(guild_id, config)
@@ -95,7 +95,7 @@ class CommandsConfigurator:
             if config is None:
                 # noinspection PyUnresolvedReferences
                 await interaction.response.send_message(
-                    'Not configured. Please run /channel-notification-channel command to do initial setup')
+                    'Not configured. Please run notification-channel add command to do initial setup')
                 return
 
             config.channel_ids_blacklist.remove(channel.name)
