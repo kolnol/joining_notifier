@@ -27,8 +27,6 @@ jobs:
           images: kolnol/discord_joining_notifier
           flavor: |
             latest=true
-          tags: |
-            type=sha
 
       
       - name: Build and push Docker image
