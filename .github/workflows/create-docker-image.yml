@@ -25,6 +25,11 @@ jobs:
         uses: docker/metadata-action@v4.6.0
         with:
           images: kolnol/discord_joining_notifier
+          flavor: |
+            latest=true
+          tags: |
+            type=sha
+
       
       - name: Build and push Docker image
         uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
