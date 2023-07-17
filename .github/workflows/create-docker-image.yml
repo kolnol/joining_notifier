@@ -24,7 +24,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       
       - name: Tag image for Docker Hub
-        run: docker image tag  discord_joining_notifier kolnol/discord_joining_notifier:$(date +%s)
+        run: docker image tag  discord_joining_notifier:$(date +%s) kolnol/discord_joining_notifier:$(date +%s)
       
       - name: Push to Docker Hub
         run: docekr push kolnol/discord_joining_notifier:$(date +%s)
