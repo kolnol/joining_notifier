@@ -28,14 +28,14 @@ class BotClient(discord.Client):
     async def notify_joiner(self, member: Member, before: VoiceState, after: VoiceState, config: GuildConfiguration):
         after_channel = after.channel
 
-        if before.channel is None and after_channel is not None:
+        if before.channel is None and after_channel is not None and is not member.bot:
             if str(after_channel.id) in config.channel_ids_blacklist:
                 logging.info(
                     f'{member.name} joined {after.channel} in guild {member.guild} but\
                      it was ignored because of the blacklist.')
                 return
 
-            message = f'{member.name} joined {after.channel} in guild {member.guild}'
+            message = f'{member.display_name} joined {after.channel} in guild {member.guild}'
             logging.info(message)
             await self.write_to_channel(config.channel_id_to_post_to, message)
 
